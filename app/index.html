@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>OnWireFrame</title>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -102,7 +102,10 @@
             float:right;
         }
         .pull-left {
-            float:left;
+            float: left;
+        }
+        small {
+            font-size:8px;
         }
     </style>
 </head>
@@ -130,7 +133,7 @@
 
 
         <select  id="kits"></select>
-
+<small><i><span class="ui-icon ui-icon-info"></span> Press backspace to remove elements</i></small>
        <h5 class="header">elements</h5>
 
         <div id="elements">
@@ -140,8 +143,10 @@
 
 </div>
 
+<div class="col-md-12 text-center">
+    <small>Proudly Hosted on <a href="https://ngdeploy.com">NGDeploy</a></small>
 
-
+</div>
 
 
 
@@ -150,7 +155,6 @@
 <script src="bower_components/fabric.js/dist/fabric.min.js"></script>
 <script src="bower_components/fabric/dist/fabric.min.js"></script>
 <script src="bower_components/fabric-customise-controls/dist/customiseControls.js"></script>
-<script src="bower_components/panelsnap/jquery.panelSnap.js"></script>
 <script src="bower_components/jquery-ui/jquery-ui.js"></script>
 <!-- endbower -->
 <script src="assets/js/main.js"></script>
