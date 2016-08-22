@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
     var canvas = new fabric.Canvas('c');
     canvas.setWidth($('.sub-container').width());
@@ -7,8 +7,8 @@ $(document).ready(function(){
 
     // grid
     for (var i = 0; i < (canvas.width / grid); i++) {
-        canvas.add(new fabric.Line([ i * grid, 0, i * grid, canvas.width], { stroke: '#ccc', selectable: false }));
-        canvas.add(new fabric.Line([ 0, i * grid, canvas.width, i * grid], { stroke: '#ccc', selectable: false }));
+        canvas.add(new fabric.Line([i * grid, 0, i * grid, canvas.width], {stroke: '#ccc', selectable: false}));
+        canvas.add(new fabric.Line([0, i * grid, canvas.width, i * grid], {stroke: '#ccc', selectable: false}));
     }
 
 
@@ -17,7 +17,7 @@ $(document).ready(function(){
     imgObj.onload = function () {
         var image = new fabric.Image(imgObj);
         image.set({
-            top:0,
+            top: 0,
             angle: 0,
             padding: 10,
             cornersize: 10,
@@ -33,9 +33,8 @@ $(document).ready(function(){
     };
 
 
-
     // snap at 10% of the size of the cell
-    canvas.on('object:moving', function(ev) {
+    canvas.on('object:moving', function (ev) {
         var w = ev.target.width * ev.target.scaleX,
             h = ev.target.height * ev.target.scaleY,
             snap = {   // Closest snapping points
@@ -77,27 +76,22 @@ $(document).ready(function(){
     });
 
 
-
-
-
-$("#addText").on('click',function(){
-    canvas.add(new fabric.IText('Tap and Type', {
-        fontFamily: 'arial black',
-        left: 100,
-        top: 100 ,
-    }));
-});
-$("#save").on('click',function(){
-    canvas.deactivateAll().renderAll();
-    window.open(canvas.toDataURL('png'));
-})
-    $(document).on('keydown', function(e) {
-        if (e.keyCode==8){
+    $("#addText").on('click', function () {
+        canvas.add(new fabric.IText('Tap and Type', {
+            fontFamily: 'arial black',
+            left: 100,
+            top: 100,
+        }));
+    });
+    $("#save").on('click', function () {
+        canvas.deactivateAll().renderAll();
+        window.open(canvas.toDataURL('png'));
+    });
+    $(document).on('keydown', function (e) {
+        if (e.keyCode == 8) {
             var obj = canvas.getActiveObject();
-            console.log(obj);
 
-            if(obj)
-            {
+            if (obj) {
                 canvas.remove(obj);
                 e.preventDefault();
                 e.stopPropagation();
@@ -109,17 +103,7 @@ $("#save").on('click',function(){
     });
 
 
-
-
-
-
-
-
-
-
-
-
-    canvas.on('object:scaling', function(options) {
+    canvas.on('object:scaling', function (options) {
         var target = options.target,
             w = target.getWidth(),
             h = target.getHeight(),
@@ -143,7 +127,7 @@ $("#save").on('click',function(){
                 left: target.left
             };
 
-        switch(target.__corner) {
+        switch (target.__corner) {
             case 'tl':
                 if (dist.left < dist.top && dist.left < threshold) {
                     attrs.scaleX = (w - (snap.left - target.left)) / target.width;
@@ -218,117 +202,113 @@ $("#save").on('click',function(){
     });
 
 
-
     var group = [];
-    var addElement = function(path,cb) {
+    var addElement = function (path, cb) {
 
-        fabric.Image.fromURL(path, function(image) {
+        fabric.Image.fromURL(path, function (image) {
             image.lockUniScaling = true
 
-            canvas.add(image.scale(1).rotate(0).set({ left: 100, top: 100 }));
+            canvas.add(image.scale(1).rotate(0).set({left: 100, top: 100}));
 
             canvas.renderAll();
             cb();
 
 
-
-
         });
-
 
 
     };
 
 
+    var kits = {};
+    /*
+     Loads stencil kits image selection
+     */
+    var loadKit = function (name, cb) {
+        $("#elements .element").remove();
+        var elements = kits[name];
+        for (var element in elements) {
+            var file = elements[element];
+            var img = "/kits/" + name + "/" + file;
+            var element = $("<img style='width:100px;height:100px' src='" + img + "'/>");
+            var li = $("<div class='element'></div>");
 
-
-
-        var kits = {};
-
-        var loadKit = function(name,cb){
-            $("#elements .element").remove();
-            var elements = kits[name];
-            for (var element in elements) {
-                var file = elements[element];
-                var img = "/kits/"+name+"/"+file;
-                var element = $("<img style='width:100px;height:100px' src='"+img+"'/>");
-                var li = $("<div class='element'></div>");
-
-                element.on('click',function(){
-                    var self = $(this);
-                    var imagePath = self.attr('src');
-                    addElement(imagePath,function(){
-                    });
-
+            element.on('click', function () {
+                var self = $(this);
+                var imagePath = self.attr('src');
+                addElement(imagePath, function () {
                 });
-                li.append(element);
-                $("#elements").append(li);
 
-
-
-            }
-            cb();
-        };
-
-
-
-        var loadKits = function(cb) {
-            $.getJSON("/elements.json", function (response) {
-
-                kits = response;
-                cb(null,response)
-
-
-            })
-        };
-
-
-        var options = {
-            $menu: false,
-            menuSelector: 'a',
-            panelSelector: '>li',
-            namespace: '.elements-container',
-            onSnapStart: function(){},
-            onSnapFinish: function(){},
-            onActivate: function(){},
-            directionThreshold: 50,
-            slideSpeed: 200,
-            delay: 0,
-            easing: 'linear',
-            offset: 0,
-            navigation: {
-                keys: {
-                    nextKey: false,
-                    prevKey: false,
-                },
-                buttons: {
-                    $nextButton: false,
-                    $prevButton: false,
-                },
-                wrapAround: false
-            }
-        };
-
-
-
-        loadKits(function(error,kits){
-            var names = Object.keys(kits);
-            names.forEach(function(name){
-                $("select#kits").append("<option value='"+name+"'>"+name+"</option>");
             });
+            li.append(element);
+            $("#elements").append(li);
 
 
-            loadKit(names[0],function(error,loaded){
-                $( "#kits" ).selectmenu({      change: function( event, data ) {
-                    var valueSelected = data.item.value;
-                    loadKit(valueSelected,function(error,loaded){
-                    });
+        }
+        cb();
+    };
 
-                }});
-            })
+    /*
+     Loads all stencil kits into memory
+     */
+    var loadKits = function (cb) {
+        $.getJSON("/elements.json", function (response) {
+
+            kits = response;
+            cb(null, response)
 
 
+        })
+    };
 
+
+    var options = {
+        $menu: false,
+        menuSelector: 'a',
+        panelSelector: '>li',
+        namespace: '.elements-container',
+        onSnapStart: function () {
+        },
+        onSnapFinish: function () {
+        },
+        onActivate: function () {
+        },
+        directionThreshold: 50,
+        slideSpeed: 200,
+        delay: 0,
+        easing: 'linear',
+        offset: 0,
+        navigation: {
+            keys: {
+                nextKey: false,
+                prevKey: false,
+            },
+            buttons: {
+                $nextButton: false,
+                $prevButton: false,
+            },
+            wrapAround: false
+        }
+    };
+
+
+    loadKits(function (error, kits) {
+        var names = Object.keys(kits);
+        names.forEach(function (name) {
+            $("select#kits").append("<option value='" + name + "'>" + name + "</option>");
         });
+
+        loadKit(names[0], function (error, loaded) {
+            $("#kits").selectmenu({
+                change: function (event, data) {
+                    var valueSelected = data.item.value;
+                    loadKit(valueSelected, function (error, loaded) {
+                    });
+                }
+            });
+        })
+
+
+    });
 
 });
