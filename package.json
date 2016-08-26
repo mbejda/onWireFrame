@@ -1,0 +1,27 @@
+{
+  "name": "mockup",
+  "version": "1.0.0",
+  "description": "Customizable WireFrame application",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt-serve": "^0.1.6",
+    "grunt": "^0.4.5",
+    "grunt-tree": "^1.1.1",
+    "wiredep": "^4.0.0",
+    "grunt-wiredep": "^3.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbejda/onWireFrame.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbejda/onWireFrame/issues"
+  },
+  "homepage": "https://github.com/mbejda/onWireFrame#readme"
+}
