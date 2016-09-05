@@ -1,6 +1,6 @@
 {
-  "name": "mockup",
-  "version": "1.0.0",
+  "name": "Mockup",
+  "version": "1.0.1",
   "description": "Customizable WireFrame application",
   "main": "Gruntfile.js",
   "dependencies": {
